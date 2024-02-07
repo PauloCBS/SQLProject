@@ -1,17 +1,17 @@
 require("express-async-errors")
-const database = require("./database/sqlite");
+const migrationRun = require("./database/sqlite/migrations");
 const AppError = require("./utils/app.error.js");   
 const express = require("express");
  //importou o express.
-
-
 
  const routes = require("./routes");
 //it is not necessary  to add the index page becaus it is a standard behavior.
 const app = express();
 //inicializou o express.
 
-database()
+migrationRun()
+
+
 app.use(express.json());
 //app.use is necessary to use the json file inside the body of our insomnia body.
 app.use(routes);
@@ -32,9 +32,6 @@ app.use((error, req, res, next) => {
         console.error(error);
 
 });
-
-
-
 
 
 const PORT = 3333;

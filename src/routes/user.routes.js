@@ -27,5 +27,6 @@ const userController = new UserController();
 //to create a new instance that allows to add ths information to the userRoutes.post
 
 userRoutes.post("/",myMyddleware, userController.create);
+userRoutes.put("/:id", userController.update);
 
 module.exports = userRoutes;

@@ -1,4 +1,4 @@
-const {hash} = require("bcryptjs")
+const {hash, compare} = require("bcryptjs")
 const AppError = require('../utils/app.error');
 const sqliteConnection = require('../database/sqlite');
 
@@ -14,7 +14,7 @@ update - PUT para atualizar um registro
 delete - DELETE para remover um registro
 */
 
-async create(req, res){
+  async create(req, res){
     
     const {name, email, password} = req.body;
     
@@ -46,7 +46,7 @@ async create(req, res){
 
   async update(req, res){
 
-    const {name, email} = req.body;
+    const {name, email, password, old_password} = req.body;
     const {id} = req.params;
 
     const database = await sqliteConnection();
@@ -65,7 +65,22 @@ async create(req, res){
     user.name = name;
     user.email = email;
 
-    await database.run(`UPDATE users SET NAME = ?,EMAIL = ?, updated_at = DATETIME('now') WHERE ID = ?`, [user.name, user.email, id]); 
+    if(password && !old_password){
+      throw new AppError("Você precisa informar a senha antiga para definir a nova senha.");
+
+    }
+
+    if(password && old_password){
+      const checkOldPassword = await compare(old_password, user.password);
+
+      if(!checkOldPassword){
+        throw new AppError("A senha antiga não confere.");
+      }
+
+      user.password = await hash(password, 8); //8 is the number of times that the password will be hashed.
+    }
+
+    await database.run(`UPDATE users SET NAME = ?,EMAIL = ?, PASSWORD = ?, updated_at = DATETIME('now') WHERE ID = ?`, [user.name, user.email, user.password, id]); 
 
     return res.status(200).json();
 

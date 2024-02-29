@@ -44,7 +44,7 @@ class NotesController{
 
 
 
- }
+    }
     async   show(req, res){
         const{id} = req.params;
 
@@ -58,6 +58,13 @@ class NotesController{
             tags,
             links
         });
+    }
+    async delete(req, res){
+        const {id} = req.params;
+
+        await knex("notes").where({id}).delete();
+
+        return res.json();
     }
 }
 

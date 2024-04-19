@@ -1,8 +1,7 @@
 const {Router} = require("express");
-
 const UserController = require("../controllers/UserController");
-
 const userRoutes = Router();
+const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
 
 
 function myMyddleware(req, res, next){
@@ -20,13 +19,10 @@ function myMyddleware(req, res, next){
 
 }
 
-
-
-
 const userController = new UserController();
 //to create a new instance that allows to add ths information to the userRoutes.post
 
 userRoutes.post("/",myMyddleware, userController.create);
-userRoutes.put("/:id", userController.update);
+userRoutes.put("/", ensureAuthenticated, userController.update);
 
 module.exports = userRoutes;

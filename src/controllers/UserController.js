@@ -47,13 +47,13 @@ delete - DELETE para remover um registro
   async update(req, res){
 
     const {name, email, password, old_password} = req.body;
-    const {id} = req.params;
+    const user_id = req.user.id;
 
     const database = await sqliteConnection();
-    const user = await database.get("SELECT * FROM users WHERE id = (?)", [id]);
+    const user = await database.get("SELECT * FROM users WHERE id = (?)", [user_id]);
 
     if(!user){  
-      throw new AppError("Usuário não encontrado.");
+      throw new AppError("User not found");
     }
 
     const userWithUpdatedEmail = await database.get("SELECT * FROM users WHERE email = (?)", [email]);
@@ -80,7 +80,7 @@ delete - DELETE para remover um registro
       user.password = await hash(password, 8); //8 is the number of times that the password will be hashed.
     }
 
-    await database.run(`UPDATE users SET NAME = ?,EMAIL = ?, PASSWORD = ?, updated_at = DATETIME('now') WHERE ID = ?`, [user.name, user.email, user.password, id]); 
+    await database.run(`UPDATE users SET NAME = ?,EMAIL = ?, PASSWORD = ?, updated_at = DATETIME('now') WHERE ID = ?`, [user.name, user.email, user.password, user_id]); 
 
     return res.status(200).json();
 

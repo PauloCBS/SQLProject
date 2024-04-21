@@ -1,5 +1,5 @@
 const {Router} = require("express");
-
+const multer = require("multer");
 const NotesController = require("../controllers/noteController.js");
 const ensureAuthenticated = require("../middlewares/ensureAuthenticated.js");
 

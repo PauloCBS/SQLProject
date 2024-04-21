@@ -3,6 +3,7 @@ const migrationRun = require("./database/sqlite/migrations");
 const AppError = require("./utils/app.error.js");   
 const express = require("express");
  //importou o express.
+ const uploadConfig = require("./configs/upload.js")
 
  const routes = require("./routes");
 //it is not necessary  to add the index page becaus it is a standard behavior.
@@ -11,10 +12,13 @@ const app = express();
 
 migrationRun()
 
+app.use("/files", express.static(uploadConfig.UPLOADS_FOLDER));
 
 app.use(express.json());
 //app.use is necessary to use the json file inside the body of our insomnia body.
 app.use(routes);
+
+
 app.use((error, req, res, next) => {
 
     if(error instanceof AppError){

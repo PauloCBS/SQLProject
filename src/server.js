@@ -1,14 +1,21 @@
 require("express-async-errors")
 const migrationRun = require("./database/sqlite/migrations");
-const AppError = require("./utils/app.error.js");   
+const AppError = require("./utils/app.error.js");  
+const cors = require("cors");
 const express = require("express");
- //importou o express.
- const uploadConfig = require("./configs/upload.js")
 
- const routes = require("./routes");
+
+
+
+
+
+const uploadConfig = require("./configs/upload.js")
+const routes = require("./routes");
 //it is not necessary  to add the index page becaus it is a standard behavior.
 const app = express();
-//inicializou o express.
+
+
+app.use(cors());
 
 migrationRun()
 
@@ -17,7 +24,6 @@ app.use("/files", express.static(uploadConfig.UPLOADS_FOLDER));
 app.use(express.json());
 //app.use is necessary to use the json file inside the body of our insomnia body.
 app.use(routes);
-
 
 app.use((error, req, res, next) => {
 
@@ -36,6 +42,8 @@ app.use((error, req, res, next) => {
         console.error(error);
 
 });
+
+
 
 
 const PORT = 3333;

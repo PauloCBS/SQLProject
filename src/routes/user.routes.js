@@ -16,10 +16,6 @@ function myMyddleware(req, res, next){
 
  console.log("você passou pelo middleware")
 
- if(!req.body.isAdmin){
-    return res.status(401).json({message: "Você não é admin"});
- }
- //foi criada
 
  next()
  //chama a proxima função que esta na fila e dessa forma ele segue para o usar controller.create.

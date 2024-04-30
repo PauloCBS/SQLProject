@@ -60,13 +60,13 @@ delete - DELETE para remover um registro
   
     if(userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id){
 
-      throw new AppError("Este e-mail já está em uso.");
+      throw new AppError("this e-mail is already in use");
     }
     user.name = name ?? user.name;
     user.email = email ?? user.email;
 
     if(password && !old_password){
-      throw new AppError("Você precisa informar a senha antiga para definir a nova senha.");
+      throw new AppError("you need to provide your old password.");
 
     }
 

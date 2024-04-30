@@ -14,7 +14,7 @@ const upload = multer(uploadConfig.MULTER);
 function myMyddleware(req, res, next){
 //using middleware we can access the requisiton, the answer and the next middleware
 
- console.log("você passou pelo middleware")
+ console.log("you passed by our middleware")
 
 
  next()
